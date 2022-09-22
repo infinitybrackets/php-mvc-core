@@ -17,14 +17,7 @@ class Application {
     {
         self::$ROOT_DIR = $config['root'];
         self::$app = $this;
-        
-        $this->config['app'] = $config['app'];
-        $this->config['auth'] = $config['auth'];
-        $this->config['connections'] = $config['connections'];
-        $this->LoadSettings();
-        $this->config = $this->ToObject($this->config);
-
-        // $this->Debug($this);
+        $this->LoadSettings($config);
 
         $this->user = null;
         $this->userClass = $config['userClass'];
@@ -42,15 +35,27 @@ class Application {
         }
     }
 
-    public function LoadSettings() {
+    /**
+     * Load configuration on config folder
+     * TODO: Add checking on $config keys before assigning 
+     */
+    public function LoadSettings($config) {
+        $this->config['app'] = $config['app'];
+        $this->config['auth'] = $config['auth'];
+        $this->config['connections'] = $config['connections'];
+
+        // Load env file
         $dotenv = Dotenv::createImmutable(self::$ROOT_DIR);
         $env = $dotenv->load();
         $this->config['env'] = $this->ToObject($env);
+
+        // Transform config type (Array) to (Object)
+        $this->config = $this->ToObject($this->config);
     }
 
     public function Run()
     {
-        //$this->triggerEvent(self::EVENT_BEFORE_REQUEST);
+        ////$this->triggerEvent(self::EVENT_BEFORE_REQUEST);
         try {
             echo $this->router->Resolve();
         } catch (\Exception $e) {
