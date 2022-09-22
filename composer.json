@@ -1,0 +1,19 @@
+{
+    "name": "infinitybrackets/php-mvc-core",
+    "description": "PHP MVC Core of Infinity Brackets enhanced project from freecodecamp.org",
+    "require": {
+        "google/apiclient": "^2.12",
+        "vlucas/phpdotenv": "^5.4"
+    },
+    "autoload": {
+        "psr-4": {
+            "Infinitybrackets\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "John Vincent Bonza",
+            "email": "jayveeinfinity@gmail.com"
+        }
+    ]
+}
