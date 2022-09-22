@@ -11,15 +11,26 @@ class Request
         return strtolower($_SERVER['REQUEST_METHOD']);
     }
 
-    public function GetUrl()
-    {
+    public function Compose() {
         $path = $_SERVER['REQUEST_URI'];
 
-        if(Application::$app->config->env->APP_ENV == "local") {
-            $path = str_replace("/cvsu_ils/", "/", $path);
-        } else {
-            $path = str_replace("/sandbox/cvsu_ils/", "/", $path);
+        switch(Application::$app->config->env->APP_ENV) {
+            case "local":
+                $path = str_replace(Application::$app->config->app->path->local, "/", $path);
+                break;
+            case "sandbox":
+                $path = str_replace(Application::$app->config->app->path->sandbox, "/", $path);
+                break;
+            case "live":
+                $path = str_replace(Application::$app->config->app->path->live, "/", $path);
+                break;
         }
+        return $path;
+    }
+
+    public function GetUrl()
+    {
+        $path = $this->Composer();
 
         if($path != '/') {
             $path = str_replace('/', '', $path);
@@ -39,13 +50,7 @@ class Request
 
     public function GetUrlConverted()
     {
-        $path = $_SERVER['REQUEST_URI'];
-
-        if(Application::$app->config['env']->APP_ENV == "local") {
-            $path = str_replace("/cvsu_ils/", "/", $path);
-        } else {
-            $path = str_replace("/sandbox/cvsu_ils/", "/", $path);
-        }
+        $path = $this->Composer();
 
         if($path != '/') {
             $path = str_replace('/', '', $path);
