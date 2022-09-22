@@ -16,13 +16,13 @@ class Request
 
         switch(Application::$app->config->env->APP_ENV) {
             case "local":
-                $path = str_replace(Application::$app->config->app->path->local, "/", $path);
+                $path = str_replace(Application::$app->config->environment->local, "/", $path);
                 break;
             case "sandbox":
-                $path = str_replace(Application::$app->config->app->path->sandbox, "/", $path);
+                $path = str_replace(Application::$app->config->environment->sandbox, "/", $path);
                 break;
             case "live":
-                $path = str_replace(Application::$app->config->app->path->live, "/", $path);
+                $path = str_replace(Application::$app->config->environment->live, "/", $path);
                 break;
         }
         return $path;
@@ -30,7 +30,7 @@ class Request
 
     public function GetUrl()
     {
-        $path = $this->Composer();
+        $path = $this->Compose();
 
         if($path != '/') {
             $path = str_replace('/', '', $path);
@@ -50,7 +50,7 @@ class Request
 
     public function GetUrlConverted()
     {
-        $path = $this->Composer();
+        $path = $this->Compose();
 
         if($path != '/') {
             $path = str_replace('/', '', $path);

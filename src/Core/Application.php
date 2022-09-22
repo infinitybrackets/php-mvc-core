@@ -15,9 +15,8 @@ class Application {
 
     public function __construct($config = [])
     {
-        self::$ROOT_DIR = $config['root'];
-        self::$app = $this;
         $this->LoadSettings($config);
+        self::$app = $this;
 
         $this->user = null;
         $this->userClass = $config['userClass'];
@@ -40,8 +39,10 @@ class Application {
      * TODO: Add checking on $config keys before assigning 
      */
     public function LoadSettings($config) {
+        self::$ROOT_DIR = $config['root'];
         $this->config['app'] = $config['app'];
         $this->config['auth'] = $config['auth'];
+        $this->config['environment'] = $config['environment'];
         $this->config['connections'] = $config['connections'];
 
         // Load env file
