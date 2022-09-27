@@ -20,8 +20,17 @@ class Database
         $default = NULL;
 
         if(is_string($config)) {
-            if($config == "ils-local" || $config == "ils-live") {
-                $default = Application::$app->config->connections->$config;
+            if($config == "ils") {
+                switch(Application::$app->config->env->APP_ENV) {
+                    default:
+                    case "local":
+                        $default = Application::$app->config->database->$ils->local;
+                        break;
+                    case "sandbox":
+                    case "live":
+                        $default = Application::$app->config->database->$ils->live;
+                        break;
+                }
             }
         }
         if(is_null($default)) {
