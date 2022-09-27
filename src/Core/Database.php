@@ -17,32 +17,37 @@ class Database
 
     public function __construct($config = NULL)
     {
-        $default = NULL;
-
         if(is_string($config)) {
             if($config == "ils") {
                 switch(Application::$app->config->env->APP_ENV) {
                     default:
                     case "local":
-                        $default = Application::$app->config->database->$ils->local;
+                        $default = Application::$app->config->database->ils->local;
+                        $this->driver = Application::$app->config->database->ils->local->DRIVER;
+                        $this->host = Application::$app->config->database->ils->local->HOST;
+                        $this->database = Application::$app->config->database->ils->local->DATABASE;
+                        $this->username = Application::$app->config->database->ils->local->USERNAME;
+                        $this->password = Application::$app->config->database->ils->local->PASSWORD;
                         break;
                     case "sandbox":
                     case "live":
-                        $default = Application::$app->config->database->$ils->live;
+                        $this->driver = Application::$app->config->database->live->local->DRIVER;
+                        $this->host = Application::$app->config->database->live->local->HOST;
+                        $this->database = Application::$app->config->database->live->local->DATABASE;
+                        $this->username = Application::$app->config->database->live->local->USERNAME;
+                        $this->password = Application::$app->config->database->live->local->PASSWORD;
                         break;
                 }
             }
         }
-        if(is_null($default)) {
+        if(is_null($this->driver) && is_null($this->host) && is_null($this->database) && is_null($this->username)) {
             $default = Application::$app->config->env;
+            $this->driver = $default->DB_DRIVER;
+            $this->host = $default->DB_HOST;
+            $this->database = $default->DB_DATABASE;
+            $this->username = $default->DB_USERNAME;
+            $this->password = $default->DB_PASSWORD;
         }
-
-        $this->driver = $config['driver'] ?? $default->DB_DRIVER;
-        $this->host = $config['host'] ?? $default->DB_HOST;
-        $this->database = $config['database'] ?? $default->DB_DATABASE;
-        $this->username = $config['username'] ?? $default->DB_USERNAME;
-        $this->password = $config['password'] ?? $default->DB_PASSWORD;
-
         $this->Connect();
     }
 
