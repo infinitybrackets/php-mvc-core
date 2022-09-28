@@ -24,11 +24,11 @@ class Database
                 switch(Application::$app->config->env->APP_ENV) {
                     default:
                     case "local":
-                        $default = Application::$app->config->database->$ils->local;
+                        $default = Application::$app->config->database->ils->local;
                         break;
                     case "sandbox":
                     case "live":
-                        $default = Application::$app->config->database->$ils->live;
+                        $default = Application::$app->config->database->ils->live;
                         break;
                 }
             }
