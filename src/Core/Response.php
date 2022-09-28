@@ -20,7 +20,11 @@ class Response
         if(!array_key_exists($url, $router->GetRouteMap(Application::$app->request->GetMethod()))) {
             throw new NotFoundException();
         }
-        header("Location: ?view=" . ltrim($url, '/'));
+        $url = ltrim($url, '/');
+        if(empty($url)) {
+            $url = './';
+        }
+        header("Location: " . $url);
     }
 
     public function RedirectWithConfirmation($url = NULL) {
