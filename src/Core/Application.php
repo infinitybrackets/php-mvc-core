@@ -62,7 +62,7 @@ class Application {
             echo $this->router->RenderView('layouts/error', [
                 'message' => $e->getMessage(),
                 'code' => $errorCode,
-                'app' => Application::$app->config['app']
+                'app' => Application::$app->config->app
             ]);
         }
     }
@@ -74,7 +74,7 @@ class Application {
     }
 
     public function LogError($code, $message) {
-        $db = new Database(Application::$app->config['env']->APP_ENV == 'local' ? 'ils-local' : 'ils-live');
+        $db = new Database('ils');
         $db->InsertOne("exception_logs", ['code', 'message'], [':in_code' => $code, ':in_message' => $message]);
     }
 
