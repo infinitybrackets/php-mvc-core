@@ -94,6 +94,19 @@ class Request
         return $data;
     }
 
+    public function GetValue($key = NULL) {
+        if(is_null($key)) {
+            return FALSE;
+        }
+        $data = $this->GetBody();
+        if(array_key_exists($key, $data)) {
+            if(empty($data[$key])) {
+                return FALSE;
+            }
+            return $data[$key];
+        }
+    }
+
     /**
      * @param $params
      * @return self

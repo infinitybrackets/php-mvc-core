@@ -19,7 +19,6 @@ class Application {
         self::$app = $this;
 
         $this->user = null;
-        $this->userClass = $config['userClass'];
         $this->request = new Request();
         $this->response = new Response();
         $this->router = new Router($this->request, $this->response);
@@ -40,15 +39,8 @@ class Application {
      */
     public function LoadSettings($config) {
         self::$ROOT_DIR = $config['root'];
-        $this->config['app'] = $config['app'];
-        $this->config['auth'] = $config['auth'];
-        $this->config['environment'] = $config['environment'];
-        $this->config['connections'] = $config['connections'];
-
-        // Load env file
-        $dotenv = Dotenv::createImmutable(self::$ROOT_DIR);
-        $env = $dotenv->load();
-        $this->config['env'] = $this->ToObject($env);
+        $this->userClass = $config['auth']['userClass'];
+        $this->config = $config;
 
         // Transform config type (Array) to (Object)
         $this->config = $this->ToObject($this->config);
@@ -70,7 +62,7 @@ class Application {
             echo $this->router->RenderView('layouts/error', [
                 'message' => $e->getMessage(),
                 'code' => $errorCode,
-                'app' => Application::$app->config['app']
+                'app' => Application::$app->config->app
             ]);
         }
     }
@@ -82,7 +74,7 @@ class Application {
     }
 
     public function LogError($code, $message) {
-        $db = new Database(Application::$app->config['env']->APP_ENV == 'local' ? 'ils-local' : 'ils-live');
+        $db = new Database('ils');
         $db->InsertOne("exception_logs", ['code', 'message'], [':in_code' => $code, ':in_message' => $message]);
     }
 
