@@ -21,15 +21,35 @@ class Response
             throw new NotFoundException();
         }
         $url = ltrim($url, '/');
+        $url = "?view=" . $url;
         if(empty($url)) {
             $url = './';
         }
-        header("Location: " . $url);
+        $this->Header($url);
+    }
+
+    public function RedirectExternalLink($url = NULL) {
+        if(is_null($url)) {
+            return FALSE;
+        }
+        $this->Header($url);
     }
 
     public function RedirectWithConfirmation($url = NULL) {
         if(is_null($url)) {
-            // Parameter error
+            return FALSE;
         }
+        $this->Header($url);
+    }
+
+    public function DownloadFile($file = NULL) {
+        if(is_null($file)) {
+            return FALSE;
+        }
+        $this->Header($file);
+    }
+
+    protected function Header($url) {
+        header('location: ' . $url);
     }
 }
