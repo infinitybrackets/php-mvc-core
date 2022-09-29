@@ -22,7 +22,7 @@ class Response
         }
         $url = ltrim($url, '/');
         $url = "?view=" . $url;
-        if(empty($url)) {
+        if(empty($url) || "?view=") {
             $url = './';
         }
         $this->Header($url);
