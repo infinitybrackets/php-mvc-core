@@ -124,4 +124,44 @@ class Router
     {
         return Application::$app->view->RenderViewOnly($view, $params);
     }
+
+    public function Route($url, $params = []) {
+        if(!array_key_exists($url, $this->GetRouteMap('get'))) {
+            return FALSE;
+        }
+        $url = explode('/', $url);
+        $url = array_filter($url);
+        $url = [...$url];
+        $count = count($url);
+        if($count > 1) {
+            $temp = "";
+            $isSet = TRUE;
+            $i = 0;
+            if(count($params) != count($url) - 1) {
+                return FALSE;
+            }
+            foreach($url as $u) {
+                if($isSet) {
+                    $temp .= "?view=" . $u;
+                    $isSet = FALSE;
+                } else {
+                    $match = str_replace(['{', '}'], '', $u);
+                    $temp .= "&" . $match . "=" . $params[$i];
+                    $i++;
+                }
+            }
+            $url = $temp;
+        } else {
+            $url = "?view=" . $url[0];
+        }
+        return $url;
+    }
+
+    public function PrintRoute($url, $params = []) {
+        $route = $this->Route($url, $params);
+        if(!$route) {
+            $route = '?view=error';
+        }
+        echo $route;
+    }
 }
