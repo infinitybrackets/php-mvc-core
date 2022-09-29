@@ -41,4 +41,8 @@ class View
     public function Render($view) {
         include_once Application::$ROOT_DIR . '/' . $this->rootDirectory . "$view.php";
     }
+
+    public static function Route($url, $params = []) {
+        return Application::$app->router->PrintRoute($url, $params);
+    }
 }
