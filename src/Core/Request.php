@@ -39,12 +39,17 @@ class Request
 
             foreach($path as $temp) {
                 $temprow = explode('=', $temp);
+
                 if(in_array('view', $temprow)) {
                     $path = '/' . $temprow[1];
-                    break;
+                } else if(in_array('tab', $temprow)) {
+                    $path .= '/' . $temprow[1];
+                } else if(in_array('action', $temprow)) {
+                    $path .= '/' . $temprow[1];
                 }
             }
         }
+
         return $path;
     }
 
@@ -89,6 +94,12 @@ class Request
         if ($this->IsPost()) {
             foreach ($_POST as $key => $value) {
                 $data[$key] = filter_input(INPUT_POST, $key, FILTER_SANITIZE_SPECIAL_CHARS);
+            }
+        }
+        if($_FILES) {
+            FileStorage::Push($value);
+            foreach ($_FILES as $file) {
+                FileStorage::Push($file);
             }
         }
         return $data;
