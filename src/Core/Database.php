@@ -33,6 +33,9 @@ class Database
                 }
             }
         }
+        if(is_array($config)) {
+            $default = $config;
+        }
         if(is_null($default)) {
             $default = Application::$app->config->env;
         }
@@ -125,11 +128,11 @@ class Database
 
     public function Query($statement = "", $parameters = []) {
         try {
-            $stmt = $this->pdo->query($statement);
-            $stmt->execute($parameters);
+            $stmt = $this->ExecuteStatement($statement, $parameters);
+            $this->results = $stmt->fetchAll();
             return $this;
         } catch(Exception $e) {
-            throw new Exception($e->getMessage());   
+            throw new Exception($e->getMessage());
         }
     }
 

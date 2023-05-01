@@ -49,7 +49,7 @@ class Response
         $this->Header($file);
     }
 
-    protected function Header($url) {
+    public function Header($url) {
         header('location: ' . $url);
     }
 }

@@ -8,7 +8,8 @@ class Controller
 {
     public string $layout = 'app';
     public string $action = '';
-    
+    public $model = NULL;
+    public $models = [];
     protected array $middlewares = [];
 
     public function SetLayout($layout): void
@@ -29,5 +30,16 @@ class Controller
     public function GetMiddlewares(): array
     {
         return $this->middlewares;
+    }
+
+    public function RegisterModel($model) {
+        $this->model = new $model();
+    }
+
+    public function BindModel($classes = []) {
+        foreach($classes as $class) {
+            $temp = explode('\\', $class);
+            $this->models[end($temp)] = new $class();
+        }
     }
 }

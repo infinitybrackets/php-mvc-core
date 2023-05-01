@@ -29,7 +29,7 @@ class MasterService
     }
 
     protected function Fetch($table, $value) {
-        $db = new Database(Application::$app->config->env->APP_ENV == 'local' ? 'ils-local' : 'ils-live');
+        $db = new Database('ils');
         return $db->SelectOne("SELECT * FROM `" . $table . "` WHERE `id` = :in_id", ['in_id' => $value])->Get();
     }
 }

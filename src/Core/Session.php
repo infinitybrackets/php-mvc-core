@@ -6,6 +6,7 @@ class Session
 {
     protected const FLASH_KEY = 'flash_messages';
     protected $USER_KEY = 'user';
+    protected $GUEST_KEY = 'guest';
 
     public function __construct($userKey)
     {
@@ -61,6 +62,18 @@ class Session
 
     public function DeAuth() {
         $this->Remove($this->USER_KEY);
+    }
+
+    public function AuthGuest($value) {
+        $this->Set($this->GUEST_KEY, $value);
+    }
+
+    public function GetAuthGuest() {
+        return $this->Get($this->GUEST_KEY);
+    }
+
+    public function DeAuthGuest() {
+        $this->Remove($this->GUEST_KEY);
     }
 
     public function Set($key, $value)
