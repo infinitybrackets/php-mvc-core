@@ -172,6 +172,10 @@ class Pagination {
             }
         }
 
-        return Application::$app->ToObject($pages);
+        // Pagination data from
+        $start = ($page * $limit) - $limit + 1;
+        $end = $last == $page ? ($page * $limit) - $limit + $total : $page * $limit;
+
+        return Application::$app->ToObject(['pages' => $pages, 'start' => $start, 'end' => $end]);
     }
 }
