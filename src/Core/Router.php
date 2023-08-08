@@ -4,8 +4,7 @@ namespace InfinityBrackets\Core;
 
 use InfinityBrackets\Exception\NotFoundException;
 
-class Router
-{
+class Router {
     private Request $request;
     private Response $response;
     private array $routeMap = [];
@@ -106,10 +105,20 @@ class Router
             $controller = new $callback[0];
             $controller->action = $callback[1];
             Application::$app->controller = $controller;
+            
+            // Get loggers, register controller and handle creation of logs
+            $loggers = $controller->GetLoggers();
+            foreach ($loggers as $logger) {
+                $logger->Register(Application::$app->controller);
+                $logger->handle();
+            }
+            
+            // Get middlewares and execute middleware rules 
             $middlewares = $controller->GetMiddlewares();
             foreach ($middlewares as $middleware) {
                 $middleware->execute();
             }
+
             $callback[0] = $controller;
         }
         return call_user_func($callback, $this->request, $this->response);

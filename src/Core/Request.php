@@ -2,8 +2,7 @@
 
 namespace InfinityBrackets\Core;
 
-class Request
-{
+class Request {
     private array $routeParams = [];
 
     public function GetMethod()

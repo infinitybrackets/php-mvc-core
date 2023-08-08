@@ -6,7 +6,6 @@ use InfinityBrackets\Core\ServiceProvider;
 use Dotenv\Dotenv;
 
 class Application {
-
     public static Application $app;
     public static string $ROOT_DIR;
     public string $layout = 'app';
@@ -17,6 +16,7 @@ class Application {
     public function __construct($config = [])
     {
         $this->LoadSettings($config);
+        date_default_timezone_set($this->config->env->APP_TIMEZONE ?? date_default_timezone_get());
         self::$app = $this;
 
         $this->user = NULL;
@@ -28,10 +28,16 @@ class Application {
         $this->database = new Database();
         $this->session = new Session($this->config->auth->defaults->session);
         $this->view = new View();
-        $this->services = new ServiceProvider();
+        $this->logger = new Logger();
         $this->helpers = $this->ToObject([
             'StringHelper' => '\InfinityBrackets\Helpers\StringHelper'
         ]);
+        $this->providers = $this->ToObject(
+            array_merge([
+                'GoogleService' => '\InfinityBrackets\Services\GoogleService',
+                'MasterService' => '\InfinityBrackets\Services\MasterService'
+            ], (array)$this->config->providers)
+        );
 
         $userId = Application::$app->session->GetAuth();
         if ($userId) {
@@ -70,7 +76,8 @@ class Application {
                 $errorCode = $e->getCode();
             }
             Application::$app->response->StatusCode($errorCode);
-            Application::$app->LogError($e->getCode(), $e->getMessage());
+            Application::$app->logger->Error($e->getCode(), $e->getMessage());
+            
             echo $this->router->RenderView('layouts/error', [
                 'message' => $e->getMessage(),
                 'code' => $errorCode,
@@ -85,11 +92,6 @@ class Application {
         echo '<pre>';
     }
 
-    public function LogError($code, $message) {
-        $db = new Database('ils');
-        $db->InsertOne("exception_logs", ['code', 'message'], [':in_code' => $code, ':in_message' => $message]);
-    }
-
     public function ToObject($array) {
         return json_decode(json_encode($array));
     }
@@ -99,12 +101,5 @@ class Application {
             $data = array('data' => $data);
         }
         echo json_encode($data);
-    }
-
-    public function HasPermission($name) {
-        $count = $this->database->CountTable("user_permissions", "WHERE `permission_id` IN (SELECT `id` FROM `permissions` WHERE `name` = :in_name) AND `user_id` = :in_user_id", ['in_name' => $name, 'in_user_id' => $this->session->GetAuth()]);
-
-        echo ($count > 0 ? '' : 'disabled');
-        //echo 'disabled';
     }
 }

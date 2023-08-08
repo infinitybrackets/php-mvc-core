@@ -4,13 +4,13 @@ namespace InfinityBrackets\Core;
 
 use InfinityBrackets\Middlewares\BaseMiddleware;
 
-class Controller
-{
+class Controller {
     public string $layout = 'app';
     public string $action = '';
     public $model = NULL;
     public $models = [];
     protected array $middlewares = [];
+    protected array $loggers = [];
 
     public function SetLayout($layout): void
     {
@@ -41,5 +41,14 @@ class Controller
             $temp = explode('\\', $class);
             $this->models[end($temp)] = new $class();
         }
+    }
+
+    public function RegisterLogger(Logger $logger) {
+        $this->loggers[] = $logger;
+    }
+
+    public function GetLoggers(): array
+    {
+        return $this->loggers;
     }
 }

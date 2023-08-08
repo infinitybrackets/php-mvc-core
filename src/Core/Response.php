@@ -4,8 +4,7 @@ namespace InfinityBrackets\Core;
 
 use InfinityBrackets\Exception\NotFoundException;
 
-class Response
-{
+class Response {
     public function StatusCode(int $code)
     {
         http_response_code($code);
