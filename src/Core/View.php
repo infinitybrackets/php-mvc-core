@@ -4,15 +4,14 @@ namespace InfinityBrackets\Core;
 
 use InfinityBrackets\Core\Application;
 
-class View
-{
+class View {
     private string $rootDirectory = '';
     public Application $app;
     public string $title = '';
 
     public function __construct() {
-        $this->rootDirectory = $_ENV['DIR_VIEW'];
         $this->app = Application::$app;
+        $this->rootDirectory = $this->app->config->env->DIR_VIEW;
     }
 
     public function RenderView($view, array $params)

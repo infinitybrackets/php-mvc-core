@@ -2,8 +2,7 @@
 
 namespace InfinityBrackets\Core;
 
-class Session
-{
+class Session {
     protected const FLASH_KEY = 'flash_messages';
     protected $USER_KEY = 'user';
     protected $GUEST_KEY = 'guest';
