@@ -6,8 +6,7 @@ use PDO;
 use InfinityBrackets\Core\Application;
 use InfinityBrackets\Exception\PDOQueryException;
 
-class Database
-{
+class Database {
     public \PDO $pdo;
     protected $driver = NULL;
     protected $host = NULL;

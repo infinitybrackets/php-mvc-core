@@ -2,8 +2,7 @@
 
 namespace InfinityBrackets\Core;
 
-class FileStorage
-{
+class FileStorage {
     private static $files = [];
 
     protected function Files() {
